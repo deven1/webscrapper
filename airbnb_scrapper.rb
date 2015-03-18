@@ -38,7 +38,15 @@ max_page.to_i.times do |i|
 	end
 	
 	search_page.css('div.text-muted.listing-location.text-truncate').each do |details|
-		info << details.text.strip.split(/ · /)
+		# code to handle instances with no reviews causing data quality issue
+		subarray = details.text.strip.split(/ · /)
+
+		if subarray.length == 3
+			info << subarray
+		else
+			# insert "0 reviews" where there are no entries for reviews
+			info << [subarray[0], "0 reviews", subarray[1]]
+		end		
 	end
 end	
 
